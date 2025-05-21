@@ -1,0 +1,939 @@
+Q1 ]
+
+CREATE TABLE EMP (
+    Empno NUMBER(4) PRIMARY KEY,
+    Ename VARCHAR2(50),
+    Job VARCHAR2(50),
+    Mgr NUMBER(4),
+    Joindate DATE,
+    salary NUMBER(7,2),
+    Comm NUMBER(7,2),
+    Deptno NUMBER(2)
+);
+
+
+INSERT ALL
+  INTO EMP (Empno, Ename, Job, Mgr, Joindate, salary, Comm, Deptno)
+    VALUES (1001, 'Rahul Gosai', 'Analyst', 2003, TO_DATE('2021-03-01', 'YYYY-MM-DD'), 60000.00, NULL, 10)
+  INTO EMP (Empno, Ename, Job, Mgr, Joindate, salary, Comm, Deptno)
+    VALUES (1002, 'Alice Brown', 'Salesman', 2002, TO_DATE('2020-07-21', 'YYYY-MM-DD'), 45000.00, 3000.00, 20)
+  INTO EMP (Empno, Ename, Job, Mgr, Joindate, salary, Comm, Deptno)
+    VALUES (1003, 'Andrew Lee', 'Manager', NULL, TO_DATE('2019-11-15', 'YYYY-MM-DD'), 85000.00, NULL, 10)
+  INTO EMP (Empno, Ename, Job, Mgr, Joindate, salary, Comm, Deptno)
+    VALUES (1004, 'Bob Johnson', 'Clerk', 2001, TO_DATE('2022-01-10', 'YYYY-MM-DD'), 32000.00, NULL, 20)
+  INTO EMP (Empno, Ename, Job, Mgr, Joindate, salary, Comm, Deptno)
+    VALUES (1005, 'Anita Sharma', 'Salesman', 2002, TO_DATE('2021-05-30', 'YYYY-MM-DD'), 48000.00, 4000.00, 30)
+  INTO EMP (Empno, Ename, Job, Mgr, Joindate, salary, Comm, Deptno)
+    VALUES (1006, 'Charlie King', 'Analyst', 2003, TO_DATE('2020-12-05', 'YYYY-MM-DD'), 58000.00, NULL, 30)
+SELECT 1 FROM DUAL;
+
+SELECT * FROM EMP;
+
+
+SELECT * FROM EMP WHERE JOB != 'Salesman';
+
+SELECT Deptno, AVG(salary) AS AvgSalary FROM EMP
+    GROUP BY Deptno
+    ORDER BY Deptno;
+
+UPDATE EMP
+    SET Ename = 'Jigar Dave' 
+    WHERE Ename = 'Rahul Gosai' AND Empno = 1001;
+
+SELECT * FROM EMP WHERE Ename LIKE 'A%';
+
+
+
+
+Q2 ]
+
+CREATE TABLE BOOKS (
+    bookno INT PRIMARY KEY,
+    bookname VARCHAR(100) NOT NULL,
+    price NUMBER(7,2),
+    author VARCHAR(30),
+    quantity_total INT NOT NULL,
+    order_quantity INT NOT NULL);
+
+INSERT ALL
+  INTO BOOKS (bookno, bookname, price, author, quantity_total, order_quantity)
+    VALUES (2001, 'Let Us C', 250.00, 'Kanetkar', 100, 25)
+  INTO BOOKS (bookno, bookname, price, author, quantity_total, order_quantity)
+    VALUES (2002, 'Data Structures Through C', 350.00, 'Kanetkar', 75, 30)
+  INTO BOOKS (bookno, bookname, price, author, quantity_total, order_quantity)
+    VALUES (2003, 'The Complete Reference Java', 550.00, 'Schildt', 50, 15)
+  INTO BOOKS (bookno, bookname, price, author, quantity_total, order_quantity)
+    VALUES (2004, 'Oracle PL/SQL Programming', 400.00, 'Feuerstein', 60, 22)
+  INTO BOOKS (bookno, bookname, price, author, quantity_total, order_quantity)
+    VALUES (2005, 'Head First Python', 180.00, 'Barry', 90, 10)
+  INTO BOOKS (bookno, bookname, price, author, quantity_total, order_quantity)
+    VALUES (2006, 'SQL Fundamentals', 220.00, 'Date', 80, 35)
+  INTO BOOKS (bookno, bookname, price, author, quantity_total, order_quantity)
+    VALUES (2007, 'Test Your C Skills', 150.00, 'Kanetkar', 120, 5)
+SELECT 1 FROM DUAL;
+
+SELECT * FROM BOOKS;
+
+SELECT SUM(price * order_quantity) AS TotalSaleValue FROM BOOKS;
+
+SELECT AVG(price * order_quantity) AS AverageSale FROM BOOKS
+    WHERE price >= 200;
+
+SELECT bookno, price FROM BOOKS
+   WHERE author = 'Kanetkar';
+
+SELECT bookno, bookname FROM BOOKS
+    WHERE order_quantity >= 20;
+
+
+
+
+Q3 ]
+
+CREATE TABLE DEPARTMENTS (
+    DeptID NUMBER PRIMARY KEY,
+    DeptName VARCHAR2(50)
+);
+
+CREATE TABLE EMPLOYEES (
+    EmpID NUMBER PRIMARY KEY,
+    EmpName VARCHAR2(50),
+    Salary NUMBER(10,2),
+    HireDate DATE,
+    DeptID NUMBER,
+    CONSTRAINT fk_dept FOREIGN KEY (DeptID) REFERENCES DEPARTMENTS(DeptID)
+);
+
+INSERT INTO DEPARTMENTS (DeptID, DeptName) VALUES (10, 'Sales');
+INSERT INTO DEPARTMENTS (DeptID, DeptName) VALUES (20, 'HR');
+INSERT INTO DEPARTMENTS (DeptID, DeptName) VALUES (30, 'IT');
+INSERT INTO DEPARTMENTS (DeptID, DeptName) VALUES (40, 'Finance');
+
+
+INSERT INTO EMPLOYEES (EmpID, EmpName, Salary, HireDate, DeptID)
+  VALUES (101, 'Alice Smith', 60000, TO_DATE('2020-01-15', 'YYYY-MM-DD'), 10);
+INSERT INTO EMPLOYEES (EmpID, EmpName, Salary, HireDate, DeptID)
+  VALUES (102, 'Bob Johnson', 75000, TO_DATE('2019-03-01', 'YYYY-MM-DD'), 20);
+INSERT INTO EMPLOYEES (EmpID, EmpName, Salary, HireDate, DeptID)
+  VALUES (103, 'Charlie Brown', 80000, TO_DATE('2021-06-10', 'YYYY-MM-DD'), 10);
+INSERT INTO EMPLOYEES (EmpID, EmpName, Salary, HireDate, DeptID)
+  VALUES (104, 'Diana Prince', 90000, TO_DATE('2018-11-20', 'YYYY-MM-DD'), 30);
+INSERT INTO EMPLOYEES (EmpID, EmpName, Salary, HireDate, DeptID)
+  VALUES (105, 'Eve Adams', 55000, TO_DATE('2022-05-01', 'YYYY-MM-DD'), NULL); 
+
+
+SELECT E.EmpName, D.DeptName FROM EMPLOYEES E
+    INNER JOIN DEPARTMENTS D ON E.DeptID = D.DeptID;
+
+SELECT E.EmpName, D.DeptName FROM EMPLOYEES E
+    LEFT JOIN DEPARTMENTS D ON E.DeptID = D.DeptID;
+
+SELECT E.EmpName, D.DeptName FROM EMPLOYEES E
+    RIGHT JOIN DEPARTMENTS D ON E.DeptID = D.DeptID;
+
+SELECT E.EmpName, D.DeptName FROM EMPLOYEES E
+    FULL OUTER JOIN DEPARTMENTS D ON E.DeptID = D.DeptID;
+
+
+
+SELECT EmpName, Salary FROM EMPLOYEES
+WHERE Salary > 70000;
+
+SELECT EmpName, HireDate FROM EMPLOYEES
+WHERE HireDate BETWEEN TO_DATE('2020-01-01', 'YYYY-MM-DD') AND TO_DATE('2020-12-31', 'YYYY-MM-DD');
+
+SELECT D.DeptName, AVG(E.Salary) AS AverageSalary FROM EMPLOYEES E
+INNER JOIN DEPARTMENTS D ON E.DeptID = D.DeptID
+GROUP BY D.DeptName;
+
+SELECT DeptID, COUNT(EmpID) AS NumberOfEmployees FROM EMPLOYEES
+GROUP BY DeptID;
+
+SELECT EmpName, Salary FROM EMPLOYEES
+ORDER BY Salary DESC;
+
+SELECT E.EmpName, D.DeptName, E.Salary FROM EMPLOYEES E
+LEFT JOIN DEPARTMENTS D ON E.DeptID = D.DeptID 
+ORDER BY D.DeptName ASC, E.EmpName ASC;
+
+
+
+Q4 ]
+
+CREATE TABLE EMP2 (
+    Empno NUMBER(4) PRIMARY KEY,
+    Ename VARCHAR2(50),
+    Job VARCHAR2(50),
+    Mgr NUMBER(4),
+    Joindate DATE,
+    salary NUMBER(10,2),
+    Comm NUMBER(7,2),
+    Deptno NUMBER(2)
+);
+
+INSERT INTO EMP2 (Empno, Ename, Job, Mgr, Joindate, salary, Comm, Deptno)
+  VALUES (1001, 'Rahul Gosai', 'Analyst', 2003, TO_DATE('2021-03-01', 'YYYY-MM-DD'), 6000, NULL, 10);
+INSERT INTO EMP2 (Empno, Ename, Job, Mgr, Joindate, salary, Comm, Deptno)
+  VALUES (1002, 'Alice Brown', 'Salesman', 2002, TO_DATE('2020-07-21', 'YYYY-MM-DD'), 4500, 300, 20);
+INSERT INTO EMP2 (Empno, Ename, Job, Mgr, Joindate, salary, Comm, Deptno)
+  VALUES (1003, 'Andrew Lee', 'Manager', NULL, TO_DATE('2019-11-15', 'YYYY-MM-DD'), 12000, NULL, 10);
+INSERT INTO EMP2 (Empno, Ename, Job, Mgr, Joindate, salary, Comm, Deptno)
+  VALUES (1004, 'Bob Johnson', 'Clerk', 2001, TO_DATE('2022-01-10', 'YYYY-MM-DD'), 3000, NULL, 20);
+INSERT INTO EMP2 (Empno, Ename, Job, Mgr, Joindate, salary, Comm, Deptno)
+  VALUES (1007, 'Zoya Khan', 'Engineer', 1003, TO_DATE('2023-01-15', 'YYYY-MM-DD'), 7500, NULL, 30);
+
+
+SELECT Ename, salary AS MonthlySalary, (salary * 12) AS YearlySalary FROM EMP2;
+
+SELECT Ename, salary FROM EMP2
+    WHERE salary NOT BETWEEN 5000 AND 10000;
+
+
+
+
+Q5] 
+
+CREATE TABLE EMP (
+    Empno NUMBER(4) PRIMARY KEY,
+    Ename VARCHAR2(50),
+    Job VARCHAR2(50),
+    Mgr NUMBER(4),
+    Joindate DATE,
+    salary NUMBER(7,2),
+    Comm NUMBER(7,2),
+    Deptno NUMBER(2)
+);
+
+
+INSERT ALL
+  INTO EMP (Empno, Ename, Job, Mgr, Joindate, salary, Comm, Deptno)
+    VALUES (1001, 'Rahul Gosai', 'Analyst', 2003, TO_DATE('2021-03-01', 'YYYY-MM-DD'), 60000.00, NULL, 10)
+  INTO EMP (Empno, Ename, Job, Mgr, Joindate, salary, Comm, Deptno)
+    VALUES (1002, 'Alice Brown', 'Salesman', 2002, TO_DATE('2020-07-21', 'YYYY-MM-DD'), 45000.00, 3000.00, 20)
+  INTO EMP (Empno, Ename, Job, Mgr, Joindate, salary, Comm, Deptno)
+    VALUES (1003, 'Andrew Lee', 'Manager', NULL, TO_DATE('2019-11-15', 'YYYY-MM-DD'), 85000.00, NULL, 10)
+  INTO EMP (Empno, Ename, Job, Mgr, Joindate, salary, Comm, Deptno)
+    VALUES (1004, 'Bob Johnson', 'Clerk', 2001, TO_DATE('2022-01-10', 'YYYY-MM-DD'), 32000.00, NULL, 20)
+  INTO EMP (Empno, Ename, Job, Mgr, Joindate, salary, Comm, Deptno)
+    VALUES (1005, 'Anita Sharma', 'Salesman', 2002, TO_DATE('2021-05-30', 'YYYY-MM-DD'), 48000.00, 4000.00, 30)
+  INTO EMP (Empno, Ename, Job, Mgr, Joindate, salary, Comm, Deptno)
+    VALUES (1006, 'Charlie King', 'Analyst', 2003, TO_DATE('2020-12-05', 'YYYY-MM-DD'), 58000.00, NULL, 30)
+SELECT 1 FROM DUAL;
+
+
+SELECT emp_no, ename, job, salary, dept_no
+FROM Emp
+ORDER BY job ASC, salary DESC;
+
+
+SELECT emp_no, ename, job, salary, dept_no
+FROM Emp
+WHERE dept_no = 10 OR dept_no = 30;
+
+
+SELECT COUNT(*) AS NumberOfManagers
+FROM Emp
+WHERE job = 'MANAGER';
+
+
+
+Q6 ]
+
+
+CREATE TABLE EMP3 ( 
+    empno NUMBER(4) PRIMARY KEY,
+    ename VARCHAR2(50),
+    ph VARCHAR2(15),
+    sal NUMBER(10,2),
+    dept_no NUMBER(2),
+    comm NUMBER(7,2)
+);
+
+
+INSERT INTO EMP3 (empno, ename, ph, sal, dept_no, comm)
+  VALUES (101, 'Rahul', '123-456-7890', 50000, 10, 500);
+INSERT INTO EMP3 (empno, ename, ph, sal, dept_no, comm)
+  VALUES (102, 'Amit', '987-654-3210', 60000, 20, NULL);
+INSERT INTO EMP3 (empno, ename, ph, sal, dept_no, comm)
+  VALUES (103, 'Priya', '555-123-4567', 55000, 10, 250);
+INSERT INTO EMP3 (empno, ename, ph, sal, dept_no, comm)
+  VALUES (104, 'Sonia', '111-222-3333', 70000, 30, 1000);
+
+
+SELECT * FROM EMP3;
+
+
+UPDATE EMP3 
+SET ename = 'Ramesh'
+WHERE ename = 'Rahul';
+
+
+UPDATE EMP3 
+SET sal = sal * 1.20;
+
+
+Q7 ]
+
+
+CREATE TABLE EMP4 ( 
+    emp_id NUMBER(4) PRIMARY KEY,
+    emp_name VARCHAR2(50),
+    emp_city VARCHAR2(50),
+    emp_addr VARCHAR2(100),
+    emp_dept VARCHAR2(10), 
+    join_date DATE
+);
+
+INSERT INTO EMP4 (emp_id, emp_name, emp_city, emp_addr, emp_dept, join_date)
+  VALUES (1001, 'Amit Sharma', 'Pune', '123 MG Road', '10', TO_DATE('15-JAN-1996', 'DD-MON-YYYY'));
+INSERT INTO EMP4 (emp_id, emp_name, emp_city, emp_addr, emp_dept, join_date)
+  VALUES (1002, 'Priya Singh', 'Mumbai', '456 Marine Drive', '20', TO_DATE('20-JUL-1998', 'DD-MON-YYYY'));
+INSERT INTO EMP4 (emp_id, emp_name, emp_city, emp_addr, emp_dept, join_date)
+  VALUES (1003, 'Rahul Verma', 'Pune', '789 FC Road', '10', TO_DATE('01-MAY-1997', 'DD-MON-YYYY'));
+INSERT INTO EMP4 (emp_id, emp_name, emp_city, emp_addr, emp_dept, join_date)
+  VALUES (1004, 'Sneha Patil', 'Delhi', '321 Connaught Place', '30', TO_DATE('10-SEP-1995', 'DD-MON-YYYY'));
+INSERT INTO EMP4 (emp_id, emp_name, emp_city, emp_addr, emp_dept, join_date)
+  VALUES (1005, 'Vikram Rathod', 'Mumbai', '654 Bandra West', '10', TO_DATE('05-DEC-1999', 'DD-MON-YYYY'));
+INSERT INTO EMP4 (emp_id, emp_name, emp_city, emp_addr, emp_dept, join_date)
+  VALUES (1006, 'Anjali Mehta', 'Pune', '987 Kothrud', '40', TO_DATE('02-APR-1997', 'DD-MON-YYYY'));
+
+
+SELECT * FROM EMP4;
+
+SELECT UPPER(emp_name) AS CapitalizedEmpName
+FROM EMP4;
+
+SELECT emp_id, emp_name, emp_city
+FROM EMP4
+WHERE emp_city = 'Pune' OR emp_city = 'Mumbai';
+
+
+SELECT emp_id, emp_name, emp_city, emp_addr, emp_dept, TO_CHAR(join_date, 'DD-MON-YYYY') AS FormattedJoinDate
+FROM EMP4
+WHERE join_date > TO_DATE('01-APR-1997', 'DD-MON-YYYY');
+
+SELECT COUNT(*) AS TotalEmployeesInDept10
+FROM EMP4
+WHERE emp_dept = '10';
+
+
+
+Q8 ]
+
+
+CREATE TABLE Employee_Q6 (
+    emp_name VARCHAR2(50) PRIMARY KEY,
+    street VARCHAR2(100),
+    city VARCHAR2(50)
+);
+
+CREATE TABLE Company_Q6 (
+    company_name VARCHAR2(100) PRIMARY KEY,
+    city VARCHAR2(50)
+);
+
+
+CREATE TABLE Works_Q6 (
+    emp_name VARCHAR2(50),
+    company_name VARCHAR2(100),
+    salary NUMBER(10,2),
+    PRIMARY KEY (emp_name, company_name), 
+    FOREIGN KEY (emp_name) REFERENCES Employee_Q6(emp_name),
+    FOREIGN KEY (company_name) REFERENCES Company_Q6(company_name)
+);
+
+
+CREATE TABLE Manager_Q6 (
+    employee VARCHAR2(50) PRIMARY KEY, 
+    manager_name VARCHAR2(50),
+    FOREIGN KEY (employee) REFERENCES Employee_Q6(emp_name),
+    FOREIGN KEY (manager_name) REFERENCES Employee_Q6(emp_name) 
+);
+
+
+INSERT ALL
+    INTO Employee_Q6 (emp_name, street, city) VALUES ('Sachin', '123 MG Road', 'Mumbai')
+    INTO Employee_Q6 (emp_name, street, city) VALUES ('Rahul', '456 FC Road', 'Pune')
+    INTO Employee_Q6 (emp_name, street, city) VALUES ('Priya', '789 SV Road', 'Mumbai')
+    INTO Employee_Q6 (emp_name, street, city) VALUES ('Amit', '321 Kothrud', 'Pune')
+    INTO Employee_Q6 (emp_name, street, city) VALUES ('Sonia', '654 Linking Road', 'Delhi')
+    INTO Employee_Q6 (emp_name, street, city) VALUES ('ManagerA', '10 Corp St', 'Mumbai')
+    INTO Employee_Q6 (emp_name, street, city) VALUES ('ManagerB', '20 Tech Park', 'Pune')
+SELECT 1 FROM DUAL;
+
+INSERT ALL
+    INTO Company_Q6 (company_name, city) VALUES ('Transtrack software solution Pvt.Ltd.', 'Pune')
+    INTO Company_Q6 (company_name, city) VALUES ('ABC Pvt.Ltd.', 'Mumbai')
+    INTO Company_Q6 (company_name, city) VALUES ('XYZ Corp', 'Delhi')
+    INTO Company_Q6 (company_name, city) VALUES ('InfoSys', 'Pune')
+SELECT 1 FROM DUAL;
+
+INSERT ALL
+    INTO Works_Q6 (emp_name, company_name, salary) VALUES ('Sachin', 'ABC Pvt.Ltd.', 70000)
+    INTO Works_Q6 (emp_name, company_name, salary) VALUES ('Rahul', 'Transtrack software solution Pvt.Ltd.', 80000)
+    INTO Works_Q6 (emp_name, company_name, salary) VALUES ('Priya', 'ABC Pvt.Ltd.', 75000)
+    INTO Works_Q6 (emp_name, company_name, salary) VALUES ('Amit', 'Transtrack software solution Pvt.Ltd.', 82000)
+    INTO Works_Q6 (emp_name, company_name, salary) VALUES ('Sonia', 'XYZ Corp', 90000)
+    INTO Works_Q6 (emp_name, company_name, salary) VALUES ('ManagerA', 'ABC Pvt.Ltd.', 120000)
+    INTO Works_Q6 (emp_name, company_name, salary) VALUES ('ManagerB', 'Transtrack software solution Pvt.Ltd.', 130000)
+SELECT 1 FROM DUAL;
+
+INSERT ALL
+    INTO Manager_Q6 (employee, manager_name) VALUES ('Sachin', 'ManagerA')
+    INTO Manager_Q6 (employee, manager_name) VALUES ('Rahul', 'ManagerB')
+    INTO Manager_Q6 (employee, manager_name) VALUES ('Priya', 'ManagerA')
+    INTO Manager_Q6 (employee, manager_name) VALUES ('Amit', 'ManagerB')
+SELECT 1 FROM DUAL;
+
+
+SELECT * FROM Works_Q6;
+
+UPDATE Employee_Q6
+SET city = 'Maharashtra'
+WHERE emp_name = 'Sachin';
+
+
+SELECT emp_name
+FROM Works_Q6
+WHERE company_name = 'Transtrack software solution Pvt.Ltd.';
+
+
+DELETE FROM Works_Q6
+WHERE company_name = 'ABC Pvt.Ltd.';
+
+
+SELECT company_name, city
+FROM Company_Q6;
+
+
+Q9 ]
+
+
+CREATE TABLE EMP5 ( 
+    emp_no NUMBER(4) PRIMARY KEY,
+    ename VARCHAR2(50),
+    job VARCHAR2(50),
+    mgr NUMBER(4),
+    joindate DATE,
+    salary NUMBER(10,2),
+    comm NUMBER(7,2),
+    dept_no NUMBER(2)
+);
+
+
+INSERT ALL
+    INTO EMP5 (emp_no, ename, job, mgr, joindate, salary, comm, dept_no)
+        VALUES (7369, 'SMITH', 'CLERK', 7902, TO_DATE('17-DEC-1980', 'DD-MON-YYYY'), 800, NULL, 20)
+    INTO EMP5 (emp_no, ename, job, mgr, joindate, salary, comm, dept_no)
+        VALUES (7499, 'ALLEN', 'SALESMAN', 7698, TO_DATE('20-FEB-1981', 'DD-MON-YYYY'), 1600, 300, 30)
+    INTO EMP5 (emp_no, ename, job, mgr, joindate, salary, comm, dept_no)
+        VALUES (7566, 'JONES', 'MANAGER', 7839, TO_DATE('02-APR-1981', 'DD-MON-YYYY'), 2975, NULL, 20)
+    INTO EMP5 (emp_no, ename, job, mgr, joindate, salary, comm, dept_no)
+        VALUES (7698, 'BLAKE', 'MANAGER', 7839, TO_DATE('01-MAY-1981', 'DD-MON-YYYY'), 2850, NULL, 30)
+    INTO EMP5 (emp_no, ename, job, mgr, joindate, salary, comm, dept_no)
+        VALUES (7782, 'CLARK', 'MANAGER', 7839, TO_DATE('09-JUN-1981', 'DD-MON-YYYY'), 2450, 100, 10)
+    INTO EMP5 (emp_no, ename, job, mgr, joindate, salary, comm, dept_no)
+        VALUES (7839, 'KING', 'PRESIDENT', NULL, TO_DATE('17-NOV-1981', 'DD-MON-YYYY'), 5000, NULL, 10)
+    INTO EMP5 (emp_no, ename, job, mgr, joindate, salary, comm, dept_no)
+        VALUES (7844, 'TURNER', 'SALESMAN', 7698, TO_DATE('08-SEP-1981', 'DD-MON-YYYY'), 1500, 0, 30)
+    INTO EMP5 (emp_no, ename, job, mgr, joindate, salary, comm, dept_no)
+        VALUES (7900, 'JAMES', 'CLERK', 7698, TO_DATE('03-DEC-1981', 'DD-MON-YYYY'), 950, NULL, 30)
+    INTO EMP5 (emp_no, ename, job, mgr, joindate, salary, comm, dept_no)
+        VALUES (7902, 'FORD', 'ANALYST', 7566, TO_DATE('03-DEC-1981', 'DD-MON-YYYY'), 3000, NULL, 20)
+    INTO EMP5 (emp_no, ename, job, mgr, joindate, salary, comm, dept_no)
+        VALUES (7934, 'MILLER', 'CLERK', 7782, TO_DATE('23-JAN-1982', 'DD-MON-YYYY'), 1300, 200, 10)
+    INTO EMP5 (emp_no, ename, job, mgr, joindate, salary, comm, dept_no)
+        VALUES (8001, 'Prashant Sali', 'ENGINEER', 7782, TO_DATE('15-MAY-2020', 'DD-MON-YYYY'), 35000, 500, 10)
+SELECT 1 FROM DUAL;
+
+
+SELECT emp_no, ename, job, dept_no, salary
+FROM EMP5
+WHERE dept_no = 10 OR dept_no = 30;
+
+
+SELECT COUNT(*) AS NumberOfManagers
+FROM EMP5
+WHERE job = 'MANAGER';
+
+
+UPDATE EMP5
+SET salary = 40000
+WHERE ename = 'Prashant Sali';
+
+SELECT * FROM EMP5;
+
+
+SELECT emp_no, ename, job, salary, comm, dept_no
+FROM EMP5
+WHERE comm IS NULL;
+
+
+
+Q10 ] Bank Database
+
+
+CREATE TABLE branch_b (
+    branch_name VARCHAR2(50) PRIMARY KEY,
+    branch_city VARCHAR2(50),
+    assets NUMBER(15,2)
+);
+
+CREATE TABLE customer_b (
+    customer_name VARCHAR2(50) PRIMARY KEY,
+    customer_street VARCHAR2(100),
+    customer_city VARCHAR2(50)
+);
+
+CREATE TABLE loan_b (
+    loan_number VARCHAR2(20) PRIMARY KEY,
+    branch_name VARCHAR2(50),
+    amount NUMBER(12,2),
+    FOREIGN KEY (branch_name) REFERENCES branch_b(branch_name)
+);
+
+CREATE TABLE borrower_b (
+    customer_name VARCHAR2(50),
+    loan_number VARCHAR2(20),
+    PRIMARY KEY (customer_name, loan_number),
+    FOREIGN KEY (customer_name) REFERENCES customer_b(customer_name),
+    FOREIGN KEY (loan_number) REFERENCES loan_b(loan_number)
+);
+
+CREATE TABLE account_b (
+    account_number VARCHAR2(20) PRIMARY KEY,
+    branch_name VARCHAR2(50),
+    balance NUMBER(12,2),
+    FOREIGN KEY (branch_name) REFERENCES branch_b(branch_name)
+);
+
+CREATE TABLE depositor_b (
+    customer_name VARCHAR2(50),
+    account_number VARCHAR2(20),
+    PRIMARY KEY (customer_name, account_number),
+    FOREIGN KEY (customer_name) REFERENCES customer_b(customer_name),
+    FOREIGN KEY (account_number) REFERENCES account_b(account_number)
+);
+
+
+INSERT ALL
+    INTO branch_b (branch_name, branch_city, assets) VALUES ('Main Street Bank', 'Mumbai', 50000000)
+    INTO branch_b (branch_name, branch_city, assets) VALUES ('Downtown Capital', 'Delhi', 75000000)
+    INTO branch_b (branch_name, branch_city, assets) VALUES ('Pune Central Credit', 'Pune', 30000000)
+    INTO branch_b (branch_name, branch_city, assets) VALUES ('Suburbia Savings', 'Mumbai', 20000000)
+SELECT 1 FROM DUAL;
+
+INSERT ALL
+    INTO customer_b (customer_name, customer_street, customer_city) VALUES ('Ram', '123 Park St', 'Mumbai')
+    INTO customer_b (customer_name, customer_street, customer_city) VALUES ('Shyam', '456 Lake Rd', 'Delhi')
+    INTO customer_b (customer_name, customer_street, customer_city) VALUES ('Priya', '789 Hill Ave', 'Pune')
+    INTO customer_b (customer_name, customer_street, customer_city) VALUES ('Amit', '123 Park St', 'Mumbai')
+    INTO customer_b (customer_name, customer_street, customer_city) VALUES ('Sunita', '321 River View', 'Pune')
+    INTO customer_b (customer_name, customer_street, customer_city) VALUES ('Vijay', '654 Ocean Dr', 'Chennai')
+    INTO customer_b (customer_name, customer_street, customer_city) VALUES ('Geeta', '987 Mountain Pass', 'Delhi')
+SELECT 1 FROM DUAL;
+
+INSERT ALL
+    INTO loan_b (loan_number, branch_name, amount) VALUES ('L-001', 'Main Street Bank', 100000)
+    INTO loan_b (loan_number, branch_name, amount) VALUES ('L-002', 'Downtown Capital', 250000)
+    INTO loan_b (loan_number, branch_name, amount) VALUES ('L-003', 'Pune Central Credit', 50000)
+    INTO loan_b (loan_number, branch_name, amount) VALUES ('L-004', 'Main Street Bank', 120000)
+SELECT 1 FROM DUAL;
+
+INSERT ALL
+    INTO borrower_b (customer_name, loan_number) VALUES ('Ram', 'L-001')
+    INTO borrower_b (customer_name, loan_number) VALUES ('Shyam', 'L-002')
+    INTO borrower_b (customer_name, loan_number) VALUES ('Vijay', 'L-004') 
+SELECT 1 FROM DUAL;
+
+INSERT ALL
+    INTO account_b (account_number, branch_name, balance) VALUES ('A-101', 'Main Street Bank', 50000)
+    INTO account_b (account_number, branch_name, balance) VALUES ('A-102', 'Downtown Capital', 120000)
+    INTO account_b (account_number, branch_name, balance) VALUES ('A-103', 'Pune Central Credit', 25000)
+    INTO account_b (account_number, branch_name, balance) VALUES ('A-104', 'Suburbia Savings', 75000)
+    INTO account_b (account_number, branch_name, balance) VALUES ('A-105', 'Main Street Bank', 30000)
+    INTO account_b (account_number, branch_name, balance) VALUES ('A-106', 'Pune Central Credit', 90000)
+SELECT 1 FROM DUAL;
+
+INSERT ALL
+    INTO depositor_b (customer_name, account_number) VALUES ('Ram', 'A-101')
+    INTO depositor_b (customer_name, account_number) VALUES ('Shyam', 'A-102')
+    INTO depositor_b (customer_name, account_number) VALUES ('Priya', 'A-103') 
+    INTO depositor_b (customer_name, account_number) VALUES ('Amit', 'A-104') 
+    INTO depositor_b (customer_name, account_number) VALUES ('Sunita', 'A-106') 
+    INTO depositor_b (customer_name, account_number) VALUES ('Geeta', 'A-105') 
+SELECT 1 FROM DUAL;
+
+
+SELECT * FROM branch_b;
+SELECT * FROM customer_b;
+SELECT * FROM loan_b;
+SELECT * FROM borrower_b;
+SELECT * FROM account_b;
+SELECT * FROM depositor_b;
+
+
+SELECT customer_name FROM depositor_b
+MINUS
+SELECT customer_name FROM borrower_b;
+
+SELECT customer_name FROM customer_b
+WHERE customer_street = (SELECT customer_street FROM customer_b WHERE customer_name = 'Ram')
+    AND customer_city = (SELECT customer_city FROM customer_b WHERE customer_name = 'Ram')
+    AND customer_name != 'Ram';
+
+
+SELECT DISTINCT b.branch_name
+FROM branch_b b
+JOIN account_b a ON b.branch_name = a.branch_name
+JOIN depositor_b d ON a.account_number = d.account_number
+JOIN customer_b c ON d.customer_name = c.customer_name
+WHERE c.customer_city = 'Pune';
+
+
+
+Q11 ] Bank Database 2nd Question
+
+
+SELECT customer_name 
+FROM customer_b
+WHERE customer_name LIKE 'A%';
+
+SELECT branch_city, SUM(assets) AS TotalAssetsInCity 
+FROM branch_b
+GROUP BY branch_city;
+
+SELECT branch_name, AVG(balance) AS AverageAccountBalance 
+FROM account_b
+GROUP BY branch_name;
+
+
+
+Q12 ]  Company Employee 
+
+
+CREATE TABLE employee_fbc (
+    employee_name VARCHAR2(50) PRIMARY KEY,
+    street VARCHAR2(100),
+    city VARCHAR2(50)
+);
+
+CREATE TABLE company_fbc (
+    company_name VARCHAR2(100) PRIMARY KEY,
+    city VARCHAR2(50)
+);
+
+CREATE TABLE works_fbc (
+    employee_name VARCHAR2(50),
+    company_name VARCHAR2(100),
+    salary NUMBER(10,2),
+    PRIMARY KEY (employee_name, company_name),
+    FOREIGN KEY (employee_name) REFERENCES employee_fbc(employee_name),
+    FOREIGN KEY (company_name) REFERENCES company_fbc(company_name)
+);
+
+CREATE TABLE manages_fbc (
+    employee_name VARCHAR2(50) PRIMARY KEY, -- Assuming an employee has one manager
+    manager_name VARCHAR2(50),
+    FOREIGN KEY (employee_name) REFERENCES employee_fbc(employee_name),
+    FOREIGN KEY (manager_name) REFERENCES employee_fbc(employee_name) -- Manager is also an employee
+);
+
+
+
+INSERT ALL
+    INTO employee_fbc (employee_name, street, city) VALUES ('Alice Johnson', '12 Main St', 'New York')
+    INTO employee_fbc (employee_name, street, city) VALUES ('Bob Smith', '45 Oak Ave', 'Chicago')
+    INTO employee_fbc (employee_name, street, city) VALUES ('Carol White', '78 Pine Ln', 'New York')
+    INTO employee_fbc (employee_name, street, city) VALUES ('David Brown', '101 Maple Dr', 'Los Angeles')
+    INTO employee_fbc (employee_name, street, city) VALUES ('Eve Davis', '202 Birch Rd', 'Chicago')
+    INTO employee_fbc (employee_name, street, city) VALUES ('Frank Wilson', '303 Cedar Ct', 'New York')
+    INTO employee_fbc (employee_name, street, city) VALUES ('Grace Lee', '404 Elm St', 'Boston')
+    INTO employee_fbc (employee_name, street, city) VALUES ('Henry Miller', '505 Spruce Way', 'Boston')
+    INTO employee_fbc (employee_name, street, city) VALUES ('Irene Adler', '221B Baker St', 'London')
+    INTO employee_fbc (employee_name, street, city) VALUES ('John Watson', '221C Baker St', 'London')
+    INTO employee_fbc (employee_name, street, city) VALUES ('Kiran Desai', 'Pune University Rd', 'Pune')
+    INTO employee_fbc (employee_name, street, city) VALUES ('Lakshman Rao', 'MG Road', 'Pune')
+SELECT 1 FROM DUAL;
+
+INSERT ALL
+    INTO company_fbc (company_name, city) VALUES ('First Bank Corporation', 'New York')
+    INTO company_fbc (company_name, city) VALUES ('Second National Bank', 'Chicago')
+    INTO company_fbc (company_name, city) VALUES ('Tech Solutions Inc', 'Boston')
+    INTO company_fbc (company_name, city) VALUES ('Global Goods Co', 'Los Angeles')
+    INTO company_fbc (company_name, city) VALUES ('TCS', 'Mumbai')
+SELECT 1 FROM DUAL;
+
+INSERT ALL
+    INTO works_fbc (employee_name, company_name, salary) VALUES ('Alice Johnson', 'First Bank Corporation', 75000)
+    INTO works_fbc (employee_name, company_name, salary) VALUES ('Bob Smith', 'Second National Bank', 65000)
+    INTO works_fbc (employee_name, company_name, salary) VALUES ('Carol White', 'First Bank Corporation', 12000) 
+    INTO works_fbc (employee_name, company_name, salary) VALUES ('David Brown', 'Global Goods Co', 70000)
+    INTO works_fbc (employee_name, company_name, salary) VALUES ('Eve Davis', 'Second National Bank', 9000)  
+    INTO works_fbc (employee_name, company_name, salary) VALUES ('Frank Wilson', 'First Bank Corporation', 8000) 
+    INTO works_fbc (employee_name, company_name, salary) VALUES ('Grace Lee', 'Tech Solutions Inc', 95000)
+    INTO works_fbc (employee_name, company_name, salary) VALUES ('Henry Miller', 'Tech Solutions Inc', 15000)
+    INTO works_fbc (employee_name, company_name, salary) VALUES ('Irene Adler', 'TCS', 30000) 
+    INTO works_fbc (employee_name, company_name, salary) VALUES ('John Watson', 'TCS', 45000) 
+    INTO works_fbc (employee_name, company_name, salary) VALUES ('Kiran Desai', 'Second National Bank', 60000)
+    INTO works_fbc (employee_name, company_name, salary) VALUES ('Lakshman Rao', 'TCS', 20000) 
+SELECT 1 FROM DUAL;
+
+INSERT ALL
+    INTO manages_fbc (employee_name, manager_name) VALUES ('Bob Smith', 'Alice Johnson')
+    INTO manages_fbc (employee_name, manager_name) VALUES ('Carol White', 'Alice Johnson')
+    INTO manages_fbc (employee_name, manager_name) VALUES ('Eve Davis', 'David Brown')
+    INTO manages_fbc (employee_name, manager_name) VALUES ('Frank Wilson', 'Alice Johnson')
+    INTO manages_fbc (employee_name, manager_name) VALUES ('John Watson', 'Irene Adler')
+SELECT 1 FROM DUAL;
+
+
+
+SELECT * FROM employee_fbc;
+SELECT * FROM company_fbc;
+SELECT * FROM works_fbc;
+SELECT * FROM manages_fbc;
+
+
+SELECT e.employee_name, e.city
+FROM employee_fbc e
+JOIN works_fbc w ON e.employee_name = w.employee_name
+WHERE w.company_name = 'First Bank Corporation';
+
+
+SELECT e.employee_name, e.street, e.city, w.salary
+FROM employee_fbc e
+JOIN works_fbc w ON e.employee_name = w.employee_name
+WHERE w.company_name = 'First Bank Corporation' AND w.salary > 10000;
+
+
+SELECT employee_name FROM employee_fbc
+MINUS
+SELECT employee_name FROM works_fbc WHERE company_name = 'First Bank Corporation';
+
+
+SELECT e.employee_name
+FROM employee_fbc e
+WHERE e.employee_name NOT IN (
+     SELECT w.employee_name
+     FROM works_fbc w
+     WHERE w.company_name = 'First Bank Corporation'
+);
+
+
+SELECT DISTINCT w.employee_name
+FROM works_fbc w
+WHERE w.company_name != 'First Bank Corporation';
+
+
+
+Q13 ] Company Employee Remaining 
+
+
+SELECT e.employee_name, e.street, e.city, w.salary, w.company_name
+FROM employee_fbc e
+JOIN works_fbc w ON e.employee_name = w.employee_name
+WHERE w.company_name = 'TCS' AND w.salary BETWEEN 25000 AND 50000;
+
+
+SELECT e.employee_name, e.street, e.city, w.company_name, w.salary
+FROM employee_fbc e
+JOIN works_fbc w ON e.employee_name = w.employee_name;
+
+
+SELECT company_name, MAX(salary) AS HighestSalary
+FROM works_fbc
+GROUP BY company_name;
+
+
+SELECT employee_name, street, city
+FROM employee_fbc
+WHERE city = 'Pune';
+
+
+Q14 ]
+
+CREATE TABLE Member_lib (
+    member_no VARCHAR2(10) PRIMARY KEY,
+    name VARCHAR2(100)
+);
+
+CREATE TABLE Book_lib (
+    isbn VARCHAR2(20) PRIMARY KEY,
+    title VARCHAR2(200),
+    authors VARCHAR2(200), 
+    publisher VARCHAR2(100)
+);
+
+CREATE TABLE Borrowed_lib (
+    member_no VARCHAR2(10),
+    isbn VARCHAR2(20),
+    borrow_date DATE, 
+    PRIMARY KEY (member_no, isbn, borrow_date), 
+    FOREIGN KEY (member_no) REFERENCES Member_lib(member_no),
+    FOREIGN KEY (isbn) REFERENCES Book_lib(isbn)
+);
+
+
+
+INSERT ALL
+    INTO Member_lib (member_no, name) VALUES ('M001', 'Aarav Sharma')
+    INTO Member_lib (member_no, name) VALUES ('M002', 'Priya Patel')
+    INTO Member_lib (member_no, name) VALUES ('M003', 'Rohan Mehta')
+    INTO Member_lib (member_no, name) VALUES ('M004', 'Sneha Reddy')
+    INTO Member_lib (member_no, name) VALUES ('M005', 'Vikram Singh') 
+SELECT 1 FROM DUAL;
+
+
+INSERT ALL
+    INTO Book_lib (isbn, title, authors, publisher) VALUES ('978-0071809252', 'Database System Concepts', 'Silberschatz, Korth, Sudarshan', 'McGraw-Hill')
+    INTO Book_lib (isbn, title, authors, publisher) VALUES ('978-9332585621', 'Operating System Concepts', 'Galvin, Gagne, Silberschatz', 'Wiley')
+    INTO Book_lib (isbn, title, authors, publisher) VALUES ('978-0070701900', 'Let Us C', 'Yashavant Kanetkar', 'BPB Publications')
+    INTO Book_lib (isbn, title, authors, publisher) VALUES ('978-0070635010', 'Data Structures Through C', 'Yashavant Kanetkar', 'BPB Publications')
+    INTO Book_lib (isbn, title, authors, publisher) VALUES ('978-0071072704', 'Introduction to Algorithms', 'Cormen, Leiserson, Rivest, Stein', 'McGraw-Hill') 
+    INTO Book_lib (isbn, title, authors, publisher) VALUES ('978-9351343910', 'Wings of Fire', 'A.P.J. Abdul Kalam', 'Universities Press')
+    INTO Book_lib (isbn, title, authors, publisher) VALUES ('978-8184001309', 'The Immortals of Meluha', 'Amish Tripathi', 'Westland')
+    INTO Book_lib (isbn, title, authors, publisher) VALUES ('978-0070000001', 'Physics for IIT-JEE', 'H.C. Verma', 'McGraw-Hill') 
+SELECT 1 FROM DUAL;
+
+INSERT ALL
+    INTO Borrowed_lib (member_no, isbn, borrow_date) VALUES ('M001', '978-0071809252', TO_DATE('2024-01-10', 'YYYY-MM-DD'))
+    INTO Borrowed_lib (member_no, isbn, borrow_date) VALUES ('M001', '978-0071072704', TO_DATE('2024-01-15', 'YYYY-MM-DD'))
+    INTO Borrowed_lib (member_no, isbn, borrow_date) VALUES ('M001', '978-0070701900', TO_DATE('2024-02-01', 'YYYY-MM-DD'))
+    INTO Borrowed_lib (member_no, isbn, borrow_date) VALUES ('M002', '978-0071809252', TO_DATE('2024-01-20', 'YYYY-MM-DD'))
+    INTO Borrowed_lib (member_no, isbn, borrow_date) VALUES ('M002', '978-0071072704', TO_DATE('2024-01-20', 'YYYY-MM-DD'))
+    INTO Borrowed_lib (member_no, isbn, borrow_date) VALUES ('M002', '978-0070000001', TO_DATE('2024-01-22', 'YYYY-MM-DD'))
+    INTO Borrowed_lib (member_no, isbn, borrow_date) VALUES ('M002', '978-9332585621', TO_DATE('2024-03-05', 'YYYY-MM-DD'))
+    INTO Borrowed_lib (member_no, isbn, borrow_date) VALUES ('M003', '978-0071809252', TO_DATE('2024-02-10', 'YYYY-MM-DD'))
+    INTO Borrowed_lib (member_no, isbn, borrow_date) VALUES ('M003', '978-0070701900', TO_DATE('2024-03-01', 'YYYY-MM-DD'))
+    INTO Borrowed_lib (member_no, isbn, borrow_date) VALUES ('M003', '978-0070701900', TO_DATE('2024-03-15', 'YYYY-MM-DD')) 
+    INTO Borrowed_lib (member_no, isbn, borrow_date) VALUES ('M003', '978-0070635010', TO_DATE('2024-04-01', 'YYYY-MM-DD'))
+    INTO Borrowed_lib (member_no, isbn, borrow_date) VALUES ('M003', '978-0070635010', TO_DATE('2024-04-10', 'YYYY-MM-DD')) 
+    INTO Borrowed_lib (member_no, isbn, borrow_date) VALUES ('M003', '978-0070635010', TO_DATE('2024-04-20', 'YYYY-MM-DD')) 
+    INTO Borrowed_lib (member_no, isbn, borrow_date) VALUES ('M003', '978-0070701900', TO_DATE('2024-05-01', 'YYYY-MM-DD')) 
+    INTO Borrowed_lib (member_no, isbn, borrow_date) VALUES ('M004', '978-9351343910', TO_DATE('2024-03-10', 'YYYY-MM-DD'))
+SELECT 1 FROM DUAL;
+
+
+
+SELECT DISTINCT m.member_no, m.name
+FROM Member_lib m
+JOIN Borrowed_lib br ON m.member_no = br.member_no
+JOIN Book_lib b ON br.isbn = b.isbn
+WHERE b.publisher = 'McGraw-Hill';
+
+
+SELECT m.member_no, m.name
+FROM Member_lib m
+WHERE NOT EXISTS (
+    SELECT b_mh.isbn
+    FROM Book_lib b_mh
+    WHERE b_mh.publisher = 'McGraw-Hill'
+    AND NOT EXISTS (
+        SELECT 1
+        FROM Borrowed_lib br
+        WHERE br.member_no = m.member_no AND br.isbn = b_mh.isbn
+    )
+);
+
+
+SELECT b.publisher, m.member_no, m.name, COUNT(br.isbn) AS NumberOfBooksBorrowed
+FROM Member_lib m
+JOIN Borrowed_lib br ON m.member_no = br.member_no
+JOIN Book_lib b ON br.isbn = b.isbn
+GROUP BY b.publisher, m.member_no, m.name
+HAVING COUNT(br.isbn) > 5;
+
+
+SELECT
+    (SELECT COUNT(*) FROM Borrowed_lib) /
+    (SELECT COUNT(*) FROM Member_lib) AS AverageBooksBorrowedPerMember 
+FROM DUAL;
+
+
+
+Q15 ]
+
+
+CREATE TABLE Students_ses (
+    student_id VARCHAR2(10) PRIMARY KEY,
+    name VARCHAR2(100),
+    age NUMBER(3),
+    major VARCHAR2(50)
+);
+
+CREATE TABLE Courses_ses (
+    course_id VARCHAR2(10) PRIMARY KEY,
+    title VARCHAR2(100),
+    department VARCHAR2(50)
+);
+
+CREATE TABLE Enrollments_ses (
+    student_id VARCHAR2(10),
+    course_id VARCHAR2(10),
+    grade NUMBER(5,2), -- Assuming numerical grade, e.g., out of 100
+    PRIMARY KEY (student_id, course_id),
+    FOREIGN KEY (student_id) REFERENCES Students_ses(student_id),
+    FOREIGN KEY (course_id) REFERENCES Courses_ses(course_id)
+);
+
+
+INSERT ALL
+    INTO Students_ses (student_id, name, age, major) VALUES ('S1001', 'Aarav Kumar', 20, 'Computer Science')
+    INTO Students_ses (student_id, name, age, major) VALUES ('S1002', 'Priya Sharma', 21, 'Electronics')
+    INTO Students_ses (student_id, name, age, major) VALUES ('S1003', 'Rohan Gupta', 22, 'Mechanical')
+    INTO Students_ses (student_id, name, age, major) VALUES ('S1004', 'Sneha Reddy', 20, 'Computer Science')
+    INTO Students_ses (student_id, name, age, major) VALUES ('S1005', 'Vikram Singh', 23, 'Civil')
+SELECT 1 FROM DUAL;
+
+
+INSERT ALL
+    INTO Courses_ses (course_id, title, department) VALUES ('CS101', 'Intro to Programming', 'Computer Science')
+    INTO Courses_ses (course_id, title, department) VALUES ('CS202', 'Data Structures', 'Computer Science')
+    INTO Courses_ses (course_id, title, department) VALUES ('EC101', 'Basic Electronics', 'Electronics')
+    INTO Courses_ses (course_id, title, department) VALUES ('ME201', 'Thermodynamics', 'Mechanical')
+    INTO Courses_ses (course_id, title, department) VALUES ('CS303', 'Algorithms', 'Computer Science')
+    INTO Courses_ses (course_id, title, department) VALUES ('EC202', 'Digital Circuits', 'Electronics')
+    INTO Courses_ses (course_id, title, department) VALUES ('MA101', 'Calculus I', 'Mathematics')
+SELECT 1 FROM DUAL;
+
+
+INSERT ALL
+    INTO Enrollments_ses (student_id, course_id, grade) VALUES ('S1001', 'CS101', 75.00)
+    INTO Enrollments_ses (student_id, course_id, grade) VALUES ('S1001', 'CS202', 60.00)
+    INTO Enrollments_ses (student_id, course_id, grade) VALUES ('S1001', 'MA101', 80.00)
+    INTO Enrollments_ses (student_id, course_id, grade) VALUES ('S1001', 'CS303', 35.00) 
+    INTO Enrollments_ses (student_id, course_id, grade) VALUES ('S1002', 'EC101', 85.00)
+    INTO Enrollments_ses (student_id, course_id, grade) VALUES ('S1002', 'EC202', 70.00)
+    INTO Enrollments_ses (student_id, course_id, grade) VALUES ('S1002', 'MA101', 65.00)
+    INTO Enrollments_ses (student_id, course_id, grade) VALUES ('S1003', 'ME201', 90.00)
+    INTO Enrollments_ses (student_id, course_id, grade) VALUES ('S1003', 'MA101', 70.00)
+    INTO Enrollments_ses (student_id, course_id, grade) VALUES ('S1004', 'CS101', 92.00)
+    INTO Enrollments_ses (student_id, course_id, grade) VALUES ('S1004', 'CS202', 88.00)
+    INTO Enrollments_ses (student_id, course_id, grade) VALUES ('S1004', 'CS303', 78.00)
+    INTO Enrollments_ses (student_id, course_id, grade) VALUES ('S1004', 'MA101', 85.00)
+    INTO Enrollments_ses (student_id, course_id, grade) VALUES ('S1005', 'CS101', 30.00) -- Failed CS101
+SELECT 1 FROM DUAL;
+
+
+
+SELECT s.student_id, s.name, COUNT(e.course_id) AS NumberOfCoursesEnrolled
+FROM Students_ses s
+JOIN Enrollments_ses e ON s.student_id = e.student_id
+GROUP BY s.student_id, s.name
+HAVING COUNT(e.course_id) > 3;
+
+SELECT c.course_id, c.title, AVG(e.grade) AS AverageGrade
+FROM Courses_ses c
+JOIN Enrollments_ses e ON c.course_id = e.course_id
+GROUP BY c.course_id, c.title
+ORDER BY c.course_id;
+
+
+SELECT DISTINCT s.student_id, s.name, e.course_id AS FailedCourse, e.grade AS FailingGrade
+FROM Students_ses s
+JOIN Enrollments_ses e ON s.student_id = e.student_id
+WHERE e.grade < 40;
+
+
+
