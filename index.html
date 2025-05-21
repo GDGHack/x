@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>// CYB3R COMMAND //</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS Variables for Theming */
+        :root {
+            --primary-red: #E50914; /* A strong, vibrant red */
+            --dark-red: #B00000;
+            --darkest-bg: #0A0A0A; /* Very dark background */
+            --dark-bg: #141414;
+            --text-light: #F5F5F5;
+            --text-muted: #A0A0A0;
+            --accent-glow: rgba(229, 9, 20, 0.5);
+            --font-primary: 'Inter', sans-serif;
+            --font-mono: 'Roboto Mono', monospace;
+        }
+
+        body {
+            background-color: var(--darkest-bg);
+            color: var(--text-light);
+            font-family: var(--font-primary);
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            line-height: 1.6;
+            position: relative; /* For scanline pseudo-element */
+        }
+
+        /* Scanline Overlay Effect */
+        body::after {
+            content: '';
+            position: fixed; /* Fixed to cover viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(10, 10, 10, 0) 0%,
+                rgba(10, 10, 10, 0) 98%,
+                rgba(255, 0, 0, 0.1) 99%, /* Faint red scanline */
+                rgba(10, 10, 10, 0.8) 100%
+            );
+            background-size: 100% 3px; /* Adjust scanline thickness and spacing */
+            animation: scanlineAnim 15s linear infinite;
+            z-index: 1000; /* Ensure it's on top of everything */
+            pointer-events: none; /* Allow interaction with elements below */
+            opacity: 0.4;
+        }
+
+        @keyframes scanlineAnim {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 100vh; } /* Animates scanlines moving down */
+        }
+
+
+        /* Hero Section Styling */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden; /* Crucial for pseudo-element backgrounds */
+            padding: 2rem;
+        }
+
+        /* Particle Canvas Styling */
+        #particleCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Behind grid and content */
+        }
+
+
+        /* Animated Background Grid */
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(to right, rgba(229, 9, 20, 0.03) 1px, transparent 1px), /* Thinner, less opaque grid lines */
+                linear-gradient(to bottom, rgba(229, 9, 20, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px; /* Slightly larger grid */
+            animation: animateGrid 25s linear infinite;
+            z-index: 1; /* Above particles, below content */
+            opacity: 0.3;
+        }
+
+        @keyframes animateGrid {
+            0% { background-position: 0 0; }
+            100% { background-position: 100px 100px; } /* Twice the size for smoother looping */
+        }
+
+        /* Content container to sit above the background */
+        .hero-content {
+            position: relative;
+            z-index: 2; /* Above particles and grid */
+            text-align: center;
+            max-width: 800px;
+            background-color: rgba(10, 10, 10, 0.3); /* Slight dark backdrop for content readability */
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(229, 9, 20, 0.2);
+        }
+
+        /* Main Headline Styling */
+        .main-headline {
+            font-family: var(--font-primary);
+            font-weight: 900; /* Extra bold for impact */
+            font-size: clamp(2.5rem, 7vw, 5rem); /* Responsive font size, slightly larger */
+            color: var(--text-light);
+            text-shadow: 0 0 12px var(--accent-glow), 0 0 25px var(--primary-red), 0 0 5px #fff; /* Added subtle white highlight */
+            margin-bottom: 1rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        /* Typing effect cursor */
+        .typing-cursor {
+            display: inline-block;
+            width: 4px; /* Slightly thicker */
+            height: 1em; /* Match font size */
+            background-color: var(--primary-red);
+            animation: blink 0.6s infinite;
+            margin-left: 6px; /* Space after text */
+            vertical-align: text-bottom; /* Align with text baseline */
+            box-shadow: 0 0 5px var(--primary-red);
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; background-color: var(--primary-red); }
+            50% { opacity: 0.5; background-color: var(--dark-red); }
+        }
+
+        /* Sub-headline Styling */
+        .sub-headline {
+            font-family: var(--font-mono);
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.5s;
+            animation-fill-mode: backwards; /* Start animation from hidden state */
+            text-shadow: 0 0 3px rgba(160, 160, 160, 0.5);
+        }
+
+        /* Call to Action Button Styling */
+        .cta-button {
+            font-family: var(--font-primary);
+            font-weight: 700;
+            background-color: var(--primary-red);
+            color: var(--text-light);
+            padding: 0.85rem 2.25rem; /* Slightly larger padding */
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            display: inline-block;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4), 0 0 15px var(--accent-glow); /* Enhanced shadow */
+            animation: pulse 1.8s infinite ease-in-out 1s; /* Delayed pulse */
+            border: 1px solid var(--dark-red);
+        }
+
+        .cta-button:hover {
+            background-color: var(--dark-red);
+            transform: translateY(-4px) scale(1.08); /* More pronounced hover effect */
+            box-shadow: 0 0 25px var(--accent-glow), 0 8px 25px rgba(0,0,0,0.6);
+        }
+
+        /* Hacker-themed elements / "Logos" */
+        .hacker-elements {
+            margin-top: 3rem;
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem; /* Spacing between icons */
+            animation: fadeInUp 1s ease-out 1s;
+            animation-fill-mode: backwards;
+        }
+
+        .hacker-icon {
+            width: 64px; /* Increased size */
+            height: 64px; /* Increased size */
+            fill: var(--primary-red); /* Icon color */
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+         .hacker-icon path {
+            stroke: var(--primary-red); /* Ensure stroke uses the variable */
+        }
+
+        .hacker-icon:hover {
+            transform: scale(1.25) rotate(5deg); /* Added slight rotation */
+            filter: drop-shadow(0 0 15px var(--primary-red));
+        }
+
+        /* Glitch Animation for text */
+        .glitch-text {
+            position: relative; /* Needed for pseudo-elements */
+            animation: glitch-main 2.5s linear infinite alternate;
+        }
+
+        @keyframes glitch-main {
+            0% { transform: skewX(0deg); }
+            5% { transform: skewX(0.5deg); }
+            10% { transform: skewX(-0.5deg); }
+            15% { transform: skewX(0.7deg) translateX(-2px); }
+            20% { transform: skewX(0deg) translateX(0); }
+            100% { transform: skewX(0deg); }
+        }
+
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent; /* Transparent background for glitch layers */
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); /* Ensure full visibility initially */
+        }
+
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--dark-red); /* Darker red for one layer */
+            animation: glitch-effect 3s infinite linear alternate-reverse;
+            color: var(--text-light); /* Ensure text color is maintained */
+        }
+
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -2px 0 rgba(0, 255, 255, 0.7), 2px 2px rgba(255, 0, 255, 0.7); /* Cyan/Magenta for effect */
+            animation: glitch-effect 2s infinite linear alternate-reverse;
+             color: var(--text-light); /* Ensure text color is maintained */
+        }
+
+        @keyframes glitch-effect {
+            0% { clip-path: polygon(0 2%, 100% 2%, 100% 5%, 0 5%); transform: translate(-1px, -1px); }
+            10% { clip-path: polygon(0 40%, 100% 40%, 100% 45%, 0 45%); transform: translate(1px, 1px); }
+            20% { clip-path: polygon(0 75%, 100% 75%, 100% 80%, 0 80%); transform: translate(-1px, 1px); }
+            30% { clip-path: polygon(0 23%, 100% 23%, 100% 28%, 0 28%); transform: translate(1px, -1px); }
+            40% { clip-path: polygon(0 50%, 100% 50%, 100% 55%, 0 55%); transform: translate(-1px, -1px); }
+            50% { clip-path: polygon(0 90%, 100% 90%, 100% 95%, 0 95%); transform: translate(1px, 1px); }
+            60% { clip-path: polygon(0 10%, 100% 10%, 100% 15%, 0 15%); transform: translate(-1px, 1px); }
+            70% { clip-path: polygon(0 60%, 100% 60%, 100% 65%, 0 65%); transform: translate(1px, -1px); }
+            80% { clip-path: polygon(0 33%, 100% 33%, 100% 38%, 0 38%); transform: translate(-1px, -1px); }
+            90% { clip-path: polygon(0 70%, 100% 70%, 100% 75%, 0 75%); transform: translate(1px, 1px); }
+            100% { clip-path: polygon(0 5%, 100% 5%, 100% 10%, 0 10%); transform: translate(-1px, 1px); }
+        }
+
+
+        /* Animation Keyframes for entrance */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-40px) scale(0.95); } /* Added scale */
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px) scale(0.95); } /* Added scale */
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(229, 9, 20, 0.7), 0 5px 20px rgba(0, 0, 0, 0.4); }
+            70% { box-shadow: 0 0 0 18px rgba(229, 9, 20, 0), 0 5px 20px rgba(0, 0, 0, 0.4); } /* Wider pulse */
+            100% { box-shadow: 0 0 0 0 rgba(229, 9, 20, 0), 0 5px 20px rgba(0, 0, 0, 0.4); }
+        }
+
+        /* Terminal-like text box */
+        .terminal-output {
+            font-family: var(--font-mono);
+            background-color: rgba(0, 0, 0, 0.5); /* Darker semi-transparent black */
+            border: 1px solid rgba(229, 9, 20, 0.3); /* More prominent border */
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2.5rem; /* Increased margin */
+            text-align: left;
+            height: 180px; /* Increased height for the terminal */
+            overflow-y: auto; /* Scroll for overflow */
+            box-shadow: 0 0 20px rgba(229, 9, 20, 0.3), inset 0 0 10px rgba(0,0,0,0.5); /* Added inset shadow */
+            animation: fadeInUp 1s ease-out 1.5s;
+            animation-fill-mode: backwards;
+        }
+
+        .terminal-output p {
+            margin-bottom: 0.6em; /* Slightly more spacing */
+            font-size: 0.95rem; /* Slightly larger font */
+            line-height: 1.5;
+            white-space: pre-wrap; /* Preserve whitespace and newlines */
+        }
+        .terminal-output .prompt { 
+            color: var(--primary-red); 
+            text-shadow: 0 0 3px var(--primary-red);
+        }
+        .terminal-output .command { color: var(--text-light); }
+        .terminal-output .output { color: var(--text-muted); }
+
+        /* Custom scrollbar for terminal */
+        .terminal-output::-webkit-scrollbar {
+            width: 10px; /* Wider scrollbar */
+        }
+        .terminal-output::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.3);
+            border-radius: 5px;
+        }
+        .terminal-output::-webkit-scrollbar-thumb {
+            background: var(--primary-red);
+            border-radius: 5px;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+        }
+        .terminal-output::-webkit-scrollbar-thumb:hover {
+            background: var(--dark-red);
+        }
+
+    </style>
+</head>
+<body class="bg-darkest-bg">
+    <canvas id="particleCanvas"></canvas>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 id="mainHeadline" class="main-headline"></h1>
+            
+            <p class="sub-headline">// Breaching Perimeters, Securing Futures.</p>
+
+            <a href="#contact" class="cta-button">Initiate Protocol</a>
+
+            <div class="hacker-elements">
+                <svg class="hacker-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12C8 14.2091 9.79086 16 12 16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 5V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 21V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M19 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M3 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <svg class="hacker-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 22S19 18 19 12V5L12 2L5 5V12C5 18 12 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 15L15 12L12 9L9 12L12 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <svg class="hacker-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7 8L3 12L7 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M17 8L21 12L17 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M14 4L10 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+
+            <div id="terminal" class="terminal-output">
+                </div>
+        </div>
+    </section>
+
+    <script>
+        // JavaScript for Typing Effect, Terminal Animation, and Particles
+
+        // --- Particle Animation ---
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+        let particlesArray;
+
+        // Set canvas dimensions
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas(); // Initial size
+        window.addEventListener('resize', resizeCanvas); // Adjust on window resize
+
+        // Particle class
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
+            }
+            // Method to draw individual particle
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+            // Check particle position, check mouse position, move the particle, draw the particle
+            update() {
+                // Check if particle is still within canvas
+                if (this.x > canvas.width || this.x < 0) {
+                    this.directionX = -this.directionX;
+                }
+                if (this.y > canvas.height || this.y < 0) {
+                    this.directionY = -this.directionY;
+                }
+                // Move particle
+                this.x += this.directionX;
+                this.y += this.directionY;
+                // Draw particle
+                this.draw();
+            }
+        }
+
+        // Create particle array
+        function initParticles() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 15000; // Adjust density
+             if (numberOfParticles > 150) numberOfParticles = 150; // Cap max particles
+
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 0.5; // Particle size
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * .4) - .2; // Slower movement
+                let directionY = (Math.random() * .4) - .2;
+                let color = Math.random() > 0.3 ? 'rgba(229, 9, 20, 0.3)' : 'rgba(100, 100, 100, 0.2)'; // Red or grey particles
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        // Animation Loop
+        function animateParticles() {
+            requestAnimationFrame(animateParticles);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+        }
+        
+        // --- Typing Effect for Main Headline ---
+        const headlineText = "// CYB3R COMMAND //"; // Updated Title
+        const headlineElement = document.getElementById('mainHeadline');
+        let charIndex = 0;
+
+        function typeHeadline() {
+            if (charIndex < headlineText.length) {
+                headlineElement.innerHTML = headlineText.substring(0, charIndex + 1) + '<span class="typing-cursor"></span>';
+                charIndex++;
+                setTimeout(typeHeadline, 120); // Adjusted typing speed
+            } else {
+                headlineElement.innerHTML = headlineText + '<span class="typing-cursor"></span>';
+                setTimeout(() => {
+                    headlineElement.classList.add('glitch-text');
+                    headlineElement.setAttribute('data-text', headlineText);
+                }, 700); // Delay before glitch starts
+            }
+        }
+
+        // --- Terminal Animation ---
+        const terminalElement = document.getElementById('terminal');
+        const terminalLines = [
+            { text: "[sys@CYB3R_CMD]# scan_network --range=10.0.0.0/8 --stealth", type: "command", delay: 150 },
+            { text: "Initializing stealth reconnaissance matrix...", type: "output", delay: 1800 },
+            { text: "Probing segment 10.0.0.0/16... Anomalies detected.", type: "output", delay: 1200, color: "var(--text-muted)"},
+            { text: ">>> Vulnerability SIG: CVE-2024-XXXX identified on node 10.1.5.22", type: "output", delay: 2200, color: "var(--primary-red)"},
+            { text: "[sys@CYB3R_CMD]# exploit_vector --target=10.1.5.22 --payload=zero_day.bin", type: "command", delay: 1000 },
+            { text: "Payload deployment sequence initiated...", type: "output", delay: 1600 },
+            { text: "Establishing covert channel... SYN ACK... Channel active.", type: "output", delay: 2000, color: "var(--text-light)"},
+            { text: "ACCESS GRANTED: Root shell @ 10.1.5.22", type: "output", delay: 2500, color: "var(--primary-red)"},
+            { text: "[sys@CYB3R_CMD]# exfiltrate_data --priority=high --target_dir=/secure_data", type: "command", delay: 1000},
+            { text: "Data exfiltration in progress... 25%... 50%... 75%...", type: "output", delay: 3000},
+            { text: "Transfer complete. Cleaning tracks... Operation successful.", type: "output", delay: 2000, color: "var(--primary-red)"}
+        ];
+        let lineIndex = 0;
+        let currentLineCharIndex = 0;
+
+        function typeTerminalLine() {
+            if (lineIndex < terminalLines.length) {
+                const currentLine = terminalLines[lineIndex];
+                let currentText = currentLine.text;
+                let pElement;
+
+                // Check if line already exists to append to it, or create new
+                const existingLineElement = terminalElement.querySelector(`#line-${lineIndex}`);
+                if (existingLineElement) {
+                    pElement = existingLineElement;
+                } else {
+                    pElement = document.createElement('p');
+                    pElement.id = `line-${lineIndex}`;
+                    terminalElement.appendChild(pElement);
+                }
+                
+                let displayedText = currentText.substring(0, currentLineCharIndex + 1);
+                if (currentLine.type === 'command') {
+                    pElement.innerHTML = `<span class="prompt" style="color: var(--primary-red);">&gt;&nbsp;</span><span class="command">${displayedText}</span>`;
+                } else {
+                    pElement.innerHTML = `<span class="output" style="color: ${currentLine.color || 'var(--text-muted)'};">${displayedText}</span>`;
+                }
+                
+                terminalElement.scrollTop = terminalElement.scrollHeight; // Auto-scroll
+
+                if (currentLineCharIndex < currentText.length) {
+                    currentLineCharIndex++;
+                    setTimeout(typeTerminalLine, 25); // Faster typing speed for terminal lines
+                } else {
+                    lineIndex++;
+                    currentLineCharIndex = 0;
+                    setTimeout(typeTerminalLine, currentLine.delay || 600); // Delay before next line
+                }
+            }
+        }
+
+        // Start animations when the DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            initParticles(); // Initialize particles
+            animateParticles(); // Start particle animation
+            typeHeadline();
+            setTimeout(typeTerminalLine, 2500); // Start terminal animation after a delay
+        });
+    </script>
+</body>
+</html>
